@@ -9,6 +9,7 @@
     if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.indexOf('PASTE_') === 0) return;
     var body = JSON.stringify({
       path: location.pathname,
+      host: location.host,
       referrer: (document.referrer || '').slice(0, 200),
       ua: (navigator.userAgent || '').slice(0, 180),
       vw: window.innerWidth
