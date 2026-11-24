@@ -104,6 +104,23 @@ section{padding:68px 0;border-top:1px solid var(--hairline)}
 .def p{color:var(--ink-muted);font-size:15px}
 .def:first-child{border-top:none}
 
+/* form liên hệ (Supabase) */
+.leadform{max-width:720px;margin-top:8px}
+.leadform .frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.leadform .frow.one{grid-template-columns:1fr}
+@media (max-width:640px){.leadform .frow{grid-template-columns:1fr}}
+.leadform label{display:block;font-size:13px;letter-spacing:.04em;color:var(--ink-muted);text-transform:uppercase}
+.leadform input,.leadform select,.leadform textarea{width:100%;margin-top:6px;padding:11px 12px;border:1px solid var(--hairline);
+  background:#fff;font-family:inherit;font-size:15px;color:var(--ink);border-radius:2px;text-transform:none;letter-spacing:0}
+.leadform input:focus,.leadform select:focus,.leadform textarea:focus{outline:none;border-color:var(--ink)}
+.leadform .req{color:#a8663a}
+.btn-send{margin-top:6px;padding:12px 30px;background:var(--ink);color:#fff;border:0;border-radius:999px;
+  font-family:inherit;font-size:14px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.btn-send:hover{opacity:.88}
+.leadmsg{margin-top:12px;font-size:14px;min-height:20px;color:var(--ink-muted)}
+.leadmsg.ok{color:#1d6b3f}
+.leadmsg.err{color:#a03030}
+
 /* ảnh bìa bài viết + logo bản tin */
 .poststrip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 28px}
 @media (max-width:700px){.poststrip{grid-template-columns:1fr}}

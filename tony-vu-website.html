@@ -144,6 +144,23 @@ section{padding:68px 0;border-top:1px solid var(--hairline)}
 .def p{color:var(--ink-muted);font-size:15px}
 .def:first-child{border-top:none}
 
+/* form liên hệ (Supabase) */
+.leadform{max-width:720px;margin-top:8px}
+.leadform .frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.leadform .frow.one{grid-template-columns:1fr}
+@media (max-width:640px){.leadform .frow{grid-template-columns:1fr}}
+.leadform label{display:block;font-size:13px;letter-spacing:.04em;color:var(--ink-muted);text-transform:uppercase}
+.leadform input,.leadform select,.leadform textarea{width:100%;margin-top:6px;padding:11px 12px;border:1px solid var(--hairline);
+  background:#fff;font-family:inherit;font-size:15px;color:var(--ink);border-radius:2px;text-transform:none;letter-spacing:0}
+.leadform input:focus,.leadform select:focus,.leadform textarea:focus{outline:none;border-color:var(--ink)}
+.leadform .req{color:#a8663a}
+.btn-send{margin-top:6px;padding:12px 30px;background:var(--ink);color:#fff;border:0;border-radius:999px;
+  font-family:inherit;font-size:14px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.btn-send:hover{opacity:.88}
+.leadmsg{margin-top:12px;font-size:14px;min-height:20px;color:var(--ink-muted)}
+.leadmsg.ok{color:#1d6b3f}
+.leadmsg.err{color:#a03030}
+
 /* ảnh bìa bài viết + logo bản tin */
 .poststrip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 28px}
 @media (max-width:700px){.poststrip{grid-template-columns:1fr}}
@@ -1081,6 +1098,84 @@ body:not(.js-ready) .page::before{content:'';display:block;border-top:1px solid 
       </div>
     </div>
   </section>
+
+  <section id="gui-loi-nhan">
+    <div class="container">
+      <div class="col">
+        <div class="sec-head"><span class="sec-num">03</span><div><h2>Gửi lời nhắn</h2>
+        <p>Điền nhanh — dữ liệu ghi thẳng vào Supabase (Postgres), dùng để thử hạ tầng.</p></div></div>
+        <form id="leadform" class="leadform" novalidate>
+          <div class="frow">
+            <label>Tên <span class="req">*</span><input name="name" maxlength="120" autocomplete="name" required></label>
+            <label>Email<input name="email" type="email" maxlength="160" autocomplete="email"></label>
+          </div>
+          <div class="frow">
+            <label>Điện thoại<input name="phone" maxlength="40" autocomplete="tel"></label>
+            <label>Bạn đang quan tâm
+              <select name="message">
+                <option value="Học ACCA / CMA">Học ACCA / CMA</option>
+                <option value="Mời giảng cho doanh nghiệp">Mời giảng cho doanh nghiệp</option>
+                <option value="Cố vấn CFO">Cố vấn CFO</option>
+                <option value="Chỉ hỏi một câu">Chỉ hỏi một câu</option>
+              </select>
+            </label>
+          </div>
+          <div class="frow one">
+            <label>Ghi chú thêm<textarea name="note" rows="3" maxlength="1500" placeholder="Mục tiêu 12 tháng, số giờ học mỗi tuần…"></textarea></label>
+          </div>
+          <button type="submit" class="btn-send">Gửi</button>
+          <p id="leadmsg" class="leadmsg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+  <script>
+  (function () {
+    var ENDPOINT = "https://exjuyhbiqzxhykejirkr.supabase.co/rest/v1/leads";
+    var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4anV5aGJpcXp4aHlrZWppcmtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0NjM3NjksImV4cCI6MjExMTAzOTc2OX0.HsoM8Q2YSPV9zERoKL-8hnpSxYVeoH3Mt_n5sCB-wFE";
+    var f = document.getElementById("leadform");
+    if (!f) return;
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var msg = document.getElementById("leadmsg");
+      var note = f.note.value.trim();
+      var payload = {
+        name: f.name.value.trim(),
+        email: f.email.value.trim(),
+        phone: f.phone.value.trim(),
+        message: f.message.value + (note ? " — " + note : ""),
+        source: "vuvandinh-test",
+        user_agent: navigator.userAgent.slice(0, 180)
+      };
+      if (!payload.name) { msg.textContent = "Cần nhập tên."; msg.className = "leadmsg err"; return; }
+      msg.textContent = "Đang gửi…"; msg.className = "leadmsg";
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "apikey": KEY,
+          "Authorization": "Bearer " + KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(payload)
+      }).then(function (r) {
+        if (r.status === 201) {
+          msg.textContent = "Đã gửi. Cảm ơn bạn!";
+          msg.className = "leadmsg ok";
+          f.reset();
+        } else {
+          return r.text().then(function (t) {
+            msg.textContent = "Lỗi " + r.status + ": " + t.slice(0, 140);
+            msg.className = "leadmsg err";
+          });
+        }
+      }).catch(function (err) {
+        msg.textContent = "Không gửi được: " + err.message;
+        msg.className = "leadmsg err";
+      });
+    });
+  })();
+  </script>
 </section>
 
 <footer>
