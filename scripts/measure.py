@@ -15,7 +15,8 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(REPO, "deploy")
-SNIPPET = '<script defer data-site="vuvandinh" src="/assets/analytics.js"></script>'
+# Đường dẫn TƯƠNG ĐỐI: GitHub Pages phục vụ site ở /<repo>/ nên "/assets/..." sẽ 404.
+SNIPPET = '<script defer data-site="vuvandinh" src="assets/analytics.js"></script>'
 MARK = 'data-site="vuvandinh"'
 BODY_END = re.compile(r"</body\s*>", re.I)
 
