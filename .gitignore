@@ -1,0 +1,23 @@
+# --- sản phẩm build / deploy ---
+deploy/
+deliverables/
+.vercel/
+.env*
+
+# --- HTML sinh tự động ở GỐC repo (build.py / build_single_file.py).
+# Dấu "/" đầu dòng = chỉ áp dụng ở gốc => file trong scripts/ vẫn được giữ.
+/*.html
+
+# --- asset sinh tự động (assets/img/ là ảnh nguồn => KHÔNG ignore, phải commit) ---
+/assets/styles.css
+/assets/fonts-inline.css
+/favicon-*.png
+/logo-*.svg
+/logo-*.png
+
+# --- Python ---
+__pycache__/
+*.pyc
+
+# --- kho clone tạm của gh_sync.py ---
+/gh-pages/

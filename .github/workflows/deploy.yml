@@ -1,0 +1,114 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [source]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cài phụ thuộc
+        run: |
+          pip install --quiet pillow
+          # font DejaVu cho make_deliverables.py (thường đã có sẵn trên runner)
+          fc-list | grep -qi dejavu || (sudo apt-get update -qq && sudo apt-get install -y -qq fonts-dejavu-core)
+
+      - name: Build trang (build.py)
+        run: python build.py
+
+      - name: Nhúng font base64 (tuỳ chọn, bỏ qua nếu lỗi mạng)
+        run: |
+          if [ -f inline_fonts.py ]; then
+            python inline_fonts.py || echo "::warning::inline_fonts.py lỗi (mạng?) — bỏ qua, không fail build"
+          fi
+
+      - name: Logo, favicon, sitemap
+        env:
+          SITE_DOMAIN: https://vuvandinh.netlify.app/   # domain ghi vào sitemap.xml — đổi nếu domain chính khác
+        run: python make_deliverables.py
+
+      - name: Gom deploy/
+        run: python make_deploy.py
+
+      - name: Chèn snippet đo lường
+        run: python scripts/measure.py
+
+      - name: Kiểm tra site (link nội bộ + h1)
+        run: python scripts/verify_site.py deploy
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deploy
+          path: deploy/
+          include-hidden-files: true   # giữ .nojekyll
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: deploy
+          path: deploy
+
+      - name: Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          : "${NETLIFY_AUTH_TOKEN:?thiếu secret NETLIFY_AUTH_TOKEN}"
+          : "${NETLIFY_SITE_ID:?thiếu secret NETLIFY_SITE_ID}"
+          npx --yes netlify-cli@latest deploy --prod --no-build --dir=deploy --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"
+          echo "Netlify production URL: https://vuvandinh.netlify.app"
+
+      - name: Vercel
+        if: ${{ !cancelled() }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        working-directory: deploy
+        run: |
+          : "${VERCEL_TOKEN:?thiếu secret VERCEL_TOKEN}"
+          # Liên kết với project có sẵn `vuvandinh` (không có bước này CLI sẽ tạo project tên "deploy")
+          npx --yes vercel@latest link --yes --project vuvandinh --token "$VERCEL_TOKEN"
+          url=$(npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN" | tee /dev/stderr | tail -n1)
+          echo "Vercel deployment URL: $url"
+          echo "Vercel production URL: https://vuvandinh.vercel.app"
+
+      - name: GitHub Pages (đẩy deploy/ lên nhánh main)
+        if: ${{ !cancelled() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch main \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" pages
+          # đồng bộ y hệt deploy/, không đưa file nội bộ lên Pages
+          rsync -a --delete --exclude '.git' --exclude '.vercel' --exclude '.env*' deploy/ pages/
+          touch pages/.nojekyll
+          cd pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nhánh main đã khớp bản build — không có gì để commit."
+          else
+            git commit --quiet -m "build: ${GITHUB_SHA::7}"
+            git push --quiet origin main
+          fi
+          echo "GitHub Pages production URL: https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
