@@ -13,24 +13,18 @@
       ua: (navigator.userAgent || '').slice(0, 180),
       vw: window.innerWidth
     });
-    var sent = false;
-    if (navigator.sendBeacon) {
-      // beacon không đặt được header => apikey qua query
-      sent = navigator.sendBeacon(ENDPOINT + '?apikey=' + encodeURIComponent(SUPABASE_ANON_KEY),
-        new Blob([body], { type: 'application/json' }));
-    }
-    if (!sent) {
-      fetch(ENDPOINT, {
-        method: 'POST',
-        keepalive: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-          'Prefer': 'return=minimal'
-        },
-        body: body
-      }).catch(function () {});
-    }
+    // Dùng fetch + keepalive. sendBeacon với Content-Type JSON bị preflight chặn
+    // (đã kiểm chứng: beacon trả lỗi âm thầm, fetch trả 201).
+    fetch(ENDPOINT, {
+      method: 'POST',
+      keepalive: true,
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: body
+    }).catch(function () {});
   } catch (e) {}
 })();
