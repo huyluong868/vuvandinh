@@ -6,7 +6,8 @@ Kết quả: tony-vu-website.html  — mở là dùng được, bấm menu chuy�
 """
 import os, re, json
 
-D = "/opt/data/sites/tony-vu-about"
+import os
+D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "tony-vu-website.html")
 PAGES = [
     ("index.html", "Trang chủ"), ("about.html", "Giới thiệu"), ("work.html", "Kinh nghiệm"),

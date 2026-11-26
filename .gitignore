@@ -21,3 +21,6 @@ __pycache__/
 
 # --- kho clone tạm của gh_sync.py ---
 /gh-pages/
+
+# --- trạng thái deploy Netlify (site id) ---
+.netlify/
