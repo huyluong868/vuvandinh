@@ -76,3 +76,15 @@ Kết quả lần chạy: https://vuvandinh-cf-test.rigorous-sushi.workers.dev
 
 **Muốn giữ site thật:** claim tài khoản tạm trong 60 phút, hoặc tạo API token (Workers Scripts: Edit) rồi
 `wrangler deploy` bằng `CLOUDFLARE_API_TOKEN`.
+
+## Chi phí thật của một lần push (đo 27/11/2026)
+
+GitHub Actions: repo **public** → số phút không tính tiền. Vercel Hobby: 100 GB + 100 deploy/ngày. Cloudflare Workers static: băng thông không giới hạn.
+
+**Netlify là chỗ duy nhất tốn hạn mức.** Rate card credit-free: 15 credit cho mỗi deploy production, 20 credit/GB băng thông, tổng 300 credit/tháng.
+
+Đếm từ `netlify api listSiteDeploys`: **9 deploy production** trên site này (8 thành công + 1 lỗi), tức ~**120/300 credit** đã tiêu — gần như toàn bộ đến từ một buổi sửa–deploy lặp lại ngày 24/11.
+
+→ Hệ quả thực dụng: **đừng dùng Netlify làm nơi thử nghiệm lặp đi lặp lại.** Sửa vặt thì deploy Vercel/Cloudflare (miễn phí), chỉ push (CI đẩy cả 3 nơi, tốn 1 deploy Netlify = 15 credit) khi nội dung đã chốt.
+
+Lưu ý: API Netlify trả `capabilities.credits.used = 0` bất kể đã deploy bao nhiêu — **không dùng được để đo**; số thật chỉ có ở dashboard → team → Usage.
