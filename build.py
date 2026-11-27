@@ -1224,7 +1224,6 @@ PAGES["contact.html"] = dict(
           <div><div class="k">Chứng chỉ</div><div class="v">ACCA · CPA Australia · VACPA</div></div>
           <div><div class="k">Bản tin</div><div class="v"><a href="https://tonyvux.substack.com/" target="_blank" rel="noopener">Nhật ký CFO — tonyvux.substack.com</a></div></div>
         </div>
-        <p class="note">Email đang dùng là địa chỉ công khai trên slide giảng dạy của thầy. Nếu thầy muốn dùng địa chỉ khác thì sửa trong <code>build.py</code> (biến <code>EMAIL</code>) rồi chạy lại — tất cả các trang sẽ tự cập nhật.</p>
       </div>
     </div>
   </section>

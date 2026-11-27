@@ -1,0 +1,9 @@
+{
+  // Cấu hình thử nghiệm: đẩy bản tĩnh của site Tony Vũ lên Cloudflare Workers (static assets)
+  "name": "vuvandinh-cf-test",
+  "compatibility_date": "2026-11-27",
+  "assets": {
+    "directory": "../deploy",
+    "not_found_handling": "404-page"
+  }
+}

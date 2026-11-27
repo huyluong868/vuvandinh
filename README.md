@@ -50,7 +50,29 @@ HTML trong `deploy/` (idempotent). `assets/analytics.js` gửi `{path, referrer,
 
 `build.py`, `build_single_file.py`, `make_deploy.py` **không bị sửa**. Các file khác phải sửa để chạy được trên CI sạch:
 
-- `make_deliverables.py`: đường dẫn `/opt/data/sites/tony-vu-about` hardcode → tính từ vị trí file.
+- `make_deliverables.py`: đường dẫn `/opt/data/user/sites/tony-vu-about` hardcode → tính từ vị trí file.
 - `inline_fonts.py`: như trên; nếu chưa có CSS Google Fonts thì tự tải (trước đây đọc file cache cục bộ).
 - `scripts/verify_site.py`: (1) trả mã thoát ≠ 0 khi lỗi — trước đó luôn thoát 0 nên không fail được job;
   (2) hiểu link tuyệt đối `/assets/...` và bỏ `#fragment`/`?query`, nếu không `/assets/analytics.js` bị báo hỏng.
+
+## Bản thứ 4: Cloudflare Workers (static assets) — đã test 27/11/2026
+
+Không cần Pages, không cần API token cho lần thử: `wrangler deploy --temporary` tạo **tài khoản tạm**, deploy
+xong có URL `*.workers.dev` sống **60 phút**, trong đó claim được để giữ vĩnh viễn.
+
+```bash
+# cấu hình: repo/deploy-cf/wrangler.jsonc  (assets.directory trỏ ../deploy)
+cd /opt/data/sites/tony-vu-about/deploy-cf
+wrangler deploy --temporary          # in ra Claim URL + hạn claim
+```
+
+Kết quả lần chạy: https://vuvandinh-cf-test.rigorous-sushi.workers.dev
+- 10/10 trang 200, 194 link nội bộ 0 hỏng, `index.html` md5 khớp bản local, ảnh `cf-cache-status: HIT`
+- Form liên hệ gửi thật → 1 dòng trong `public.leads` (`source=vuvandinh-test`)
+
+**Khác biệt so với 3 bản kia:** Workers assets tự đổi `/contact.html` → **307 → `/contact`** (clean URL).
+Đừng đặt `html_handling: "none"` để giữ đuôi `.html` — làm vậy thì `/` trả 404 vì `index.html` không còn
+được map. Muốn URL giống hệt Vercel/Netlify thì phải thêm `_redirects` với `/ /index.html 200`.
+
+**Muốn giữ site thật:** claim tài khoản tạm trong 60 phút, hoặc tạo API token (Workers Scripts: Edit) rồi
+`wrangler deploy` bằng `CLOUDFLARE_API_TOKEN`.
