@@ -88,3 +88,23 @@ GitHub Actions: repo **public** → số phút không tính tiền. Vercel Hobby
 → Hệ quả thực dụng: **đừng dùng Netlify làm nơi thử nghiệm lặp đi lặp lại.** Sửa vặt thì deploy Vercel/Cloudflare (miễn phí), chỉ push (CI đẩy cả 3 nơi, tốn 1 deploy Netlify = 15 credit) khi nội dung đã chốt.
 
 Lưu ý: API Netlify trả `capabilities.credits.used = 0` bất kể đã deploy bao nhiêu — **không dùng được để đo**; số thật chỉ có ở dashboard → team → Usage.
+
+## Deploy thủ công (không push) — `scripts/deploy_local.sh`
+
+```bash
+scripts/deploy_local.sh            # deploy bản đang có trong deploy/
+scripts/deploy_local.sh --build    # build lại rồi deploy
+```
+
+Đẩy Vercel production + Cloudflare Workers (tài khoản tạm, link 60 phút). Dùng khi chỉ muốn xem bản mới
+mà **không** tốn 1 deploy production của Netlify (= 15 credit); push vẫn là đường duy nhất cập nhật
+Netlify và GitHub Pages.
+
+### Ba cái bẫy script này xử lý
+
+1. **`make_deploy.py` xoá và tạo lại `deploy/`** → mất `.vercel/project.json`. Thiếu nó, `vercel deploy`
+   tạo **project mới tên `deploy`** (`deploy-khaki-chi.vercel.app`) thay vì cập nhật `vuvandinh.vercel.app`,
+   và bật deployment protection. Script luôn `vercel link --yes --project vuvandinh` trước khi deploy.
+2. **`build_single_file.py` là bước riêng** — `build.py` KHÔNG sinh lại `tony-vu-website.html` (bản one-file
+   917 KB). Sửa nội dung mà quên chạy nó thì bản one-file vẫn giữ chữ cũ.
+3. **`.env.local`** chứa OIDC token; script xoá sau mỗi lần deploy.
