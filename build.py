@@ -476,7 +476,6 @@ PAGES["about.html"] = dict(
           <p><strong>Lấy bài toán thật làm trung tâm.</strong> Kế toán quản trị và IFRS chỉ có nghĩa khi gắn với một quyết định cụ thể của doanh nghiệp: giá bán, cơ cấu chi phí, dòng tiền, hay một giao dịch cần hạch toán đúng.</p>
           <p><strong>Nói bằng số của chính học viên.</strong> Lớp học hiệu quả khi học viên mang số liệu và tình huống ở công ty mình vào, chứ không chỉ làm đề mẫu.</p>
           <p><strong>Chứng chỉ là phương tiện, không phải đích.</strong> Đỗ ACCA là kết quả; thứ ở lại lâu hơn là khả năng đọc báo cáo, đặt câu hỏi và ra quyết định.</p>
-          <p class="note">Phần này mô tả cách làm việc suy ra từ nội dung các lớp và phản hồi học viên — nếu thầy muốn viết bằng lời của mình, sửa trực tiếp trong <code>about.html</code>.</p>
         </div>
       </div>
     </div>
@@ -519,7 +518,7 @@ PAGES["work.html"] = dict(
         <p>Theo từng doanh nghiệp, không theo thứ tự thời gian.</p></div></div>
       </div>
 """ + grid_cards(list(W.values())) + """
-      <div class="col"><p class="note">Nguồn: trang giảng viên của FTMS Global (ftmsglobal.edu.vn/giang-vien-cma, /giang-vien-ftms) và trang khoá học của ATC Academy. FTMS ghi “hơn 13 năm”, ATC ghi “hơn 14 năm” cho cùng một người — trang này dùng mức thấp hơn để an toàn; thứ tự và mốc thời gian cụ thể cần thầy xác nhận nếu muốn ghi rõ năm.</p></div>
+      <div class="col"><p class="note">Nguồn: trang giảng viên của FTMS Global (ftmsglobal.edu.vn/giang-vien-cma, /giang-vien-ftms) và trang khoá học của ATC Academy. FTMS ghi “hơn 13 năm”, ATC ghi “hơn 14 năm” cho cùng một người — trang này dùng mức thấp hơn để an toàn; mốc thời gian cụ thể chưa có công bố nào thống nhất giữa hai nguồn.</p></div>
     </div>
   </section>
 
@@ -641,7 +640,7 @@ PAGES["schools.html"] = dict(
           <p>Được Hiệp hội Kế toán Công chứng Anh (ACCA) mời viết tài liệu và giảng chương trình đào tạo giảng viên.</p></div>
       </div>
       <div class="col">
-        <p class="note">Lưu ý: danh sách giảng viên trên website của trung tâm có thể luân phiên theo khoá — nếu dùng trang này như hồ sơ chính thức, nên kiểm lại đường dẫn công bố hiện hành.</p>
+        <p class="note">Danh sách giảng viên trên website của trung tâm có thể luân phiên theo khoá — kiểm lại ở nguồn chính thức khi cần dẫn chứng.</p>
       </div>
     </div>
   </section>
@@ -763,7 +762,7 @@ PAGES["blueprint.html"] = dict(
         <div class="card"><h3>Cấp 3 — Strategic Professional</h3><div class="role">2 môn bắt buộc + 2 trong 4 môn tự chọn</div>
           <p>Bắt buộc: SBL (chiến lược kinh doanh) và SBR (báo cáo chiến lược). Tự chọn: AFM, APM, ATX, AAA.</p></div>
       </div>
-      <div class="col"><p class="note">Cấu trúc/mã môn ACCA có thể được hội cập nhật theo thời gian — kiểm lại ở Study Hub chính thức trước khi in tài liệu cho lớp.</p></div>
+      <div class="col"><p class="note">Cấu trúc và mã môn ACCA có thể được hội cập nhật theo thời gian — nguồn chính thức là ACCA Study Hub.</p></div>
     </div>
   </section>
 
@@ -777,7 +776,6 @@ PAGES["blueprint.html"] = dict(
           <div class="def"><h3>Luyện đề theo barem, không theo cảm giác</h3><p>ACCA chấm theo cấu trúc câu trả lời. Viết lại bài của mình theo barem examiner’s report là cách tăng điểm nhanh nhất.</p></div>
           <div class="def"><h3>Giữ liên tục vì động lực, không vì lịch</h3><p>Đứt quãng là kẻ thù lớn nhất — quan trọng hơn cả việc chọn môn trước.</p></div>
         </div>
-        <p class="note">Bốn điểm này là quan điểm giảng dạy, cần thầy xác nhận/sửa trước khi dùng chính thức.</p>
       </div>
     </div>
   </section>
@@ -804,7 +802,6 @@ PAGES["philosophy.html"] = dict(
           <div class="def"><h3>3. Chấm theo barem để biết mình mất điểm ở đâu</h3><p>Không dừng ở “đúng/sai”. Viết lại câu trả lời theo cấu trúc mà hội đồng chấm điểm dùng, và ghi lại lỗi lặp.</p></div>
           <div class="def"><h3>4. Nói được trước người khác</h3><p>Kết thúc một chủ đề bằng việc trình bày lại cho người khác hiểu — người làm tài chính phải giải thích được số liệu cho người không làm tài chính.</p></div>
         </div>
-        <p class="note">Bốn nguyên tắc trên là bản tổng hợp từ mô tả lớp học và phản hồi học viên — vẫn nên để chính thầy đọc lại một lượt. Lời của thầy thì nằm ở bản tin Nhật ký CFO.</p>
       </div>
     </div>
   </section>
@@ -907,7 +904,7 @@ PAGES["students.html"] = dict(
         ("Thầy giáo rất nhiệt tình chia sẻ kiến thức và kinh nghiệm cho học viên… Cả hai khoá học mình đều thấy rất hữu ích khi áp dụng vào công việc thực tế.", "Học viên khoá Kế toán Quản trị — ATC Academy"),
         ("Thầy Tony rất dễ thương, cách chia sẻ và cách khai thác thêm kinh nghiệm làm việc từ học viên rất khéo léo và gần gũi.", "Học viên ATC Academy"),
     ]) + """
-        <p class="note">Trích nguyên văn, không thêm bớt. Nếu muốn bổ sung phản hồi mới (Zalo, Facebook, email học viên), chỉ cần thêm một khối <code>&lt;div class="quote"&gt;</code> — nhưng phải xin phép người viết trước khi đăng tên.</p>
+        <p class="note">Trích nguyên văn, không thêm bớt, có ghi nguồn người nói.</p>
       </div>
     </div>
   </section>
@@ -1025,7 +1022,7 @@ PAGES["for-organisations.html"] = dict(
             <li><strong>Đầu ra cụ thể:</strong> kết thúc đợt đào tạo phải có một sản phẩm dùng được — bộ báo cáo quản trị, checklist soát xét, hoặc bản trình bày cho ban điều hành.</li>
             <li><strong>Chuyển giao:</strong> tài liệu và mẫu để lại cho doanh nghiệp, không buộc phải thuê lại mới dùng được.</li>
           </ul>
-          <p class="note">Phần này mô tả cách làm đề xuất; nội dung cụ thể và học phí sẽ do thầy xác nhận với từng doanh nghiệp.</p>
+          <p class="note">Nội dung và học phí được xác định theo từng doanh nghiệp.</p>
         </div>
       </div>
     </div>
